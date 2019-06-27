@@ -22,9 +22,7 @@
 				float2 uv_RightEye;
 				float2 uv_Guide;
 			};
-
 			
-
 			void surf(Input IN, inout SurfaceOutput o) {
 				half4 left = tex2D(_LeftEye, IN.uv_LeftEye);
 				half4 right = tex2D(_RightEye, IN.uv_RightEye);
@@ -36,7 +34,6 @@
 				o.Albedo.r = 0.65 * ((right.r * g.r) + (left.r * (1 - g.r)));
 				o.Albedo.g = 0.65 * ((right.g * g.g) + (left.g * (1 - g.g)));
 				o.Albedo.b = 0.65 * ((right.b * g.b) + (left.b * (1 - g.b)));
-
 
 				o.Alpha = left.a;
 			}

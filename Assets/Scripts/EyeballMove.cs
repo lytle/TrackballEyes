@@ -6,6 +6,9 @@ using System.Timers;
 [AddComponentMenu("Camera-Control/Eyeball Look")]
 public class EyeballMove : MonoBehaviour
 {
+    private bool _debugMode = false;
+
+    // Input Rotation Vars
     string _inputMethodX = "Mouse X";
     string _inputMethodY = "Mouse Y"; // this is bad code
 
@@ -21,35 +24,16 @@ public class EyeballMove : MonoBehaviour
     float _rotAverageY = 0F;
 
     public float FrameCounter = 20;
-    Quaternion _originalRotation;
+    private Quaternion _originalRotation;
 
-    // Autoaim Vars
+    // Goal AutoAim Vars
     Vector3 _vecToGoal;
-    public float AutoAimTolerance = 0.1f;
+    public float AutoAimTolerance = 0.005f;
+    public float AutoAimSpeed = 0.15f;
     private float _autoAimStepper;
-    public float StickAmount = 20.0f;
-    public float AutoAimSpeed = 0.00025f;
-    private float _autoAimResetTimer = 0.5f;
-    private Coroutine ResettingAutoAim;
     private Vector3 _tempOldForward;
 
-    private bool _lockEye;
-    public bool LockEye
-    {
-        get => _lockEye;
-        set
-        {
-            if (!value)
-            {
-                _autoAimStepper = 0.0f;
-                _autoAimResetTimer = 0.75f;
-                if(ResettingAutoAim == null) ResettingAutoAim = StartCoroutine(ResetAutoAim());
-                _tempOldForward = Vector3.zero;
-                Debug.Log("Reset");
-            }
-            _lockEye = value;
-        }
-    }
+    private bool _lockEye = false;
 
     void Start()
     {
@@ -58,6 +42,8 @@ public class EyeballMove : MonoBehaviour
 
     public void ControlEye()
     {
+        if (_lockEye) return;
+
         //Resets the average rotation
         _rotAverageY = 0f;
         _rotAverageX = 0f;
@@ -65,14 +51,6 @@ public class EyeballMove : MonoBehaviour
         //Gets rotational input from the mouse
         _rotationX += Input.GetAxis(_inputMethodX) * SensitivityX;
         _rotationY += Input.GetAxis(_inputMethodY) * SensitivityY;
-
-        Debug.Log(_rotationX);
-        if(_rotationX * _rotationX > StickAmount || _rotationY * _rotationY > StickAmount)
-        {
-            Debug.Log("Unlocked");
-            LockEye = false;
-        }
-        if (LockEye) return;
 
         //Adds the rotation values to their relative array
         _rotArrayY.Add(_rotationY);
@@ -110,46 +88,46 @@ public class EyeballMove : MonoBehaviour
             transform.localRotation = _originalRotation * xQuaternion * yQuaternion;
     }
 
-    public void AimCorrection()
+    public bool CheckIfCooperating()
     {
-        float angleToGoal = Vector3.Dot(transform.forward, _vecToGoal);
+        if (_debugMode)
+        {
+            return false;
+        }
+        if (_lockEye)
+        {
+            return true;
+        }
+        var angleToGoal = Vector3.Dot(transform.forward, _vecToGoal);
 
-        // bake these into the if statement later
+        // Scale for a percentage // TO-DO: bake this into auto aim tolerance later
         angleToGoal = ((angleToGoal + 1.0f) / 2.0f);
         angleToGoal = 1.0f - angleToGoal;
 
         //Debug.Log(angleToGoal + " < " + AutoAimTolerance);
-
-        // if we are within autoAimTolernace% angle of the AND we have not moved the camera
-        if (angleToGoal < AutoAimTolerance || _autoAimResetTimer < 0)
-        {
-            //Debug.Log("Locked: " + this.gameObject.name + "'s angleToGoal = " + angleToGoal);
-            LockEye = true;
-
-            if (_tempOldForward == Vector3.zero)
-            {
-                _tempOldForward = this.transform.forward;
-                Debug.Log("Set old forward vector to " + _tempOldForward);
-
-            }
-
-            // Engage auto aim
-
-            transform.forward = Vector3.Lerp(_tempOldForward, _vecToGoal, _autoAimStepper);
-
-            _autoAimStepper += AutoAimSpeed * Time.deltaTime;
-        }
+        // if we are within autoAimTolernace% angle
+        return angleToGoal < AutoAimTolerance;
     }
 
-    public void GenerateAutoAimCoords(Transform goalToLookAt)
+    public void MoveToFinalGoal()
     {
+        _lockEye = true;
+
+        _tempOldForward = this.transform.forward;
+
+        var herm = Mathf.Lerp(0.0f, 1.0f, _autoAimStepper * _autoAimStepper * (3.0f - 2.0f * _autoAimStepper));
+        transform.rotation = Quaternion.LookRotation(Vector3.Lerp(_tempOldForward, _vecToGoal, herm), Vector3.up);
+       _autoAimStepper += (AutoAimSpeed * Time.deltaTime);
+       Debug.Log("step " + AutoAimSpeed * Time.deltaTime);
+
+
+    }
+
+    public void SetGoalCoords(Transform goalToLookAt)
+    {
+        Debug.Log("Final pos " + goalToLookAt.position);
         _vecToGoal = goalToLookAt.position - this.transform.position;
         _vecToGoal.Normalize();
-
-        float angleToGoal = Vector3.Dot(transform.forward, _vecToGoal);
-        angleToGoal = ((angleToGoal + 1.0f) / 2.0f);
-        angleToGoal = 1.0f - angleToGoal;
-        //Debug.Log("angleToGoal = " + angleToGoal);
     }
 
     public void SetInputs(string Xinput, string Yinput)
@@ -157,15 +135,4 @@ public class EyeballMove : MonoBehaviour
         _inputMethodX = Xinput;
         _inputMethodY = Yinput;
     }
-
-    IEnumerator ResetAutoAim()
-    {
-        while (_autoAimResetTimer > 0.0f)
-        {
-            _autoAimResetTimer -= Time.deltaTime;
-            yield return new WaitForEndOfFrame();
-        }
-        ResettingAutoAim = null;
-    }
-
 }

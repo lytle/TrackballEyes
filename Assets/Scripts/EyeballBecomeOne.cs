@@ -16,10 +16,12 @@ namespace Assets.Scripts
         // Start is called before the first frame update
         void Start()
         {
-            LeftEye.GetComponent<EyeballMove>().SetInputs("Horizontal", "Vertical");
+            LeftEye.GetComponent<EyeballMove>().SetInputs("Left Analog X", "Left Analog Y");
+            RightEye.GetComponent<EyeballMove>().SetInputs("Right Analog X", "Right Analog Y");
 
-            LeftEye.GetComponent<EyeballMove>().GenerateAutoAimCoords(CurrentGoal);
-            RightEye.GetComponent<EyeballMove>().GenerateAutoAimCoords(CurrentGoal);
+
+            LeftEye.GetComponent<EyeballMove>().SetGoalCoords(CurrentGoal);
+            RightEye.GetComponent<EyeballMove>().SetGoalCoords(CurrentGoal);
         }
 
         // Update is called once per frame
@@ -31,9 +33,13 @@ namespace Assets.Scripts
             RightEye.GetComponent<EyeballMove>().ControlEye();
 
             if (CurrentGoal != null) {
-                // Auto-aim goes here
-                LeftEye.GetComponent<EyeballMove>().AimCorrection();
-                RightEye.GetComponent<EyeballMove>().AimCorrection();
+                // Check if Completed Level
+                if (LeftEye.GetComponent<EyeballMove>().CheckIfCooperating() &&
+                    RightEye.GetComponent<EyeballMove>().CheckIfCooperating())
+                {
+                    LeftEye.GetComponent<EyeballMove>().MoveToFinalGoal();
+                    RightEye.GetComponent<EyeballMove>().MoveToFinalGoal();
+                }
             }
         }
 

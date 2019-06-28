@@ -315,7 +315,7 @@ MonoBehaviour:
   LeftEye: {fileID: 1837366038}
   RightEye: {fileID: 1247606708}
   DistanceBetween: 0.25
-  currentGoal: {fileID: 2067141205}
+  CurrentGoal: {fileID: 2067141205}
 --- !u!4 &322976369
 Transform:
   m_ObjectHideFlags: 0
@@ -576,10 +576,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d34b510e199ef8a408751b90f01715d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensitivityX: 20
-  sensitivityY: 20
-  frameCounter: 20
-  autoAimTolerance: 0.06
+  SensitivityX: 20
+  SensitivityY: 20
+  FrameCounter: 20
+  AutoAimTolerance: 0.06
+  StickAmount: 10
+  AutoAimSpeed: 4
 --- !u!20 &1247606710
 Camera:
   m_ObjectHideFlags: 0
@@ -842,10 +844,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d34b510e199ef8a408751b90f01715d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensitivityX: 20
-  sensitivityY: 20
-  frameCounter: 20
-  autoAimTolerance: 0.06
+  SensitivityX: 20
+  SensitivityY: 20
+  FrameCounter: 20
+  AutoAimTolerance: 0.06
+  StickAmount: 10
+  AutoAimSpeed: 4
 --- !u!20 &1837366040
 Camera:
   m_ObjectHideFlags: 0
@@ -999,7 +1003,7 @@ GameObject:
   - component: {fileID: 2067141203}
   - component: {fileID: 2067141202}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Grass Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

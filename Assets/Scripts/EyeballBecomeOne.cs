@@ -11,15 +11,15 @@ namespace Assets.Scripts
         // This value is the "base" distance between eyes // eye distance from their local zero should be around -0.25 and 0.25 respectively at start, based on their randomized rotation
         [Range(0.0f, 0.5f)] public float DistanceBetween = 0.25f;
 
-        public Transform currentGoal;
+        public Transform CurrentGoal;
 
         // Start is called before the first frame update
         void Start()
         {
             LeftEye.GetComponent<EyeballMove>().SetInputs("Horizontal", "Vertical");
 
-            LeftEye.GetComponent<EyeballMove>().GenerateAutoAimCoords(currentGoal);
-            RightEye.GetComponent<EyeballMove>().GenerateAutoAimCoords(currentGoal);
+            LeftEye.GetComponent<EyeballMove>().GenerateAutoAimCoords(CurrentGoal);
+            RightEye.GetComponent<EyeballMove>().GenerateAutoAimCoords(CurrentGoal);
         }
 
         // Update is called once per frame
@@ -30,7 +30,7 @@ namespace Assets.Scripts
             LeftEye.GetComponent<EyeballMove>().ControlEye();
             RightEye.GetComponent<EyeballMove>().ControlEye();
 
-            if (currentGoal != null) {
+            if (CurrentGoal != null) {
                 // Auto-aim goes here
                 LeftEye.GetComponent<EyeballMove>().AimCorrection();
                 RightEye.GetComponent<EyeballMove>().AimCorrection();
@@ -38,7 +38,7 @@ namespace Assets.Scripts
         }
 
         // The distance between the eye's scales with their dot product's closeness to 1 e.g. if both eyes are looking at the same thing, they should be identical and "focused"
-        void ScaleEyeDistance()
+        private void ScaleEyeDistance()
         {
             // [-1, 1] // 1 if same dir and parallel, 0 if perpindicular, -1 if opposite dir and parallel
             float scale = Vector3.Dot(LeftEye.transform.forward, RightEye.transform.forward);

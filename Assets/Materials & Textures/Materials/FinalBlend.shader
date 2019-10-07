@@ -6,7 +6,7 @@
 				_Threshold("Threshold",Range(0,1)) = 0
 	}
 		SubShader{
-			Tags { "RenderType" = "Opaque" }
+			Tags { "RenderType" = "Transparent" }
 			LOD 200
 
 			CGPROGRAM
@@ -24,9 +24,11 @@
 			};
 			
 			void surf(Input IN, inout SurfaceOutput o) {
+
 				half4 left = tex2D(_LeftEye, IN.uv_LeftEye);
 				half4 right = tex2D(_RightEye, IN.uv_RightEye);
 				half4 g = tex2D(_Guide, IN.uv_Guide);
+
 				/*if ((g.r + g.g + g.b)*0.33333f < _Threshold)
 					o.Albedo = right.rgb;
 				else

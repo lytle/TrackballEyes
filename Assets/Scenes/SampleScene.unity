@@ -544,9 +544,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f96035dc1182b246af52e822187ac29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SensitivityX: 20
-  SensitivityY: 20
-  FrameCounter: 20
   AutoAimTolerance: 0.005
   AutoAimSpeed: 0.15
 --- !u!20 &1247606710
@@ -728,9 +725,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f96035dc1182b246af52e822187ac29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SensitivityX: 20
-  SensitivityY: 20
-  FrameCounter: 20
   AutoAimTolerance: 0.005
   AutoAimSpeed: 0.15
 --- !u!20 &1837366040
@@ -875,7 +869,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2067141201}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.34, y: 5, z: 10.27}
+  m_LocalPosition: {x: -15.69, y: 5, z: -6.88}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children: []
   m_Father: {fileID: 0}

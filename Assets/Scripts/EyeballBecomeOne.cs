@@ -26,6 +26,10 @@ public class EyeballBecomeOne : MonoBehaviour
         // Set current goals
         LeftEyeMove.SetGoalCoords(CurrentGoal);
         RightEyeMove.SetGoalCoords(CurrentGoal);
+
+        // Randomize Eye Rotation
+        LeftEyeMove.Spin(Random.rotation, 2.5f);
+        RightEyeMove.Spin(Random.rotation, 2.5f);
     }
 
     // Update is called once per frame

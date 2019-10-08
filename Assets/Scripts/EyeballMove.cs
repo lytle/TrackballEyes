@@ -3,14 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Timers;
 
-[AddComponentMenu("Camera-Control/Eyeball Look")]
 public class EyeballMove : MonoBehaviour
 {
     private bool _debugMode = false;
 
     // Input Rotation Vars
     string _inputMethodX = "Mouse X";
-    string _inputMethodY = "Mouse Y"; // this is bad code
+    string _inputMethodY = "Mouse Y"; // this is bad code, but fine for now
 
     public float SensitivityX = 20f;
     public float SensitivityY = 20f;
@@ -76,7 +75,7 @@ public class EyeballMove : MonoBehaviour
                 _rotAverageX += _rotArrayX[i];
             }
 
-            //Standard maths to find the average
+            // Find the average
             _rotAverageY /= _rotArrayY.Count;
             _rotAverageX /= _rotArrayX.Count;
 
@@ -85,7 +84,7 @@ public class EyeballMove : MonoBehaviour
             Quaternion xQuaternion = Quaternion.AngleAxis(_rotAverageX, Vector3.up);
 
             //Rotate
-            transform.localRotation = _originalRotation * xQuaternion * yQuaternion;
+            transform.localRotation = xQuaternion * yQuaternion * _originalRotation;
     }
 
     public bool CheckIfCooperating()
@@ -98,6 +97,7 @@ public class EyeballMove : MonoBehaviour
         {
             return true;
         }
+
         var angleToGoal = Vector3.Dot(transform.forward, _vecToGoal);
 
         // Scale for a percentage // TO-DO: bake this into auto aim tolerance later

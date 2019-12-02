@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 {
     public Text timer;
 
+    [SerializeField]
     private GameObject[] possibleGoals;
     private GameObject currentGoal;
 

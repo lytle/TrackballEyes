@@ -94,7 +94,7 @@ public class EyeballMoveV2 : MonoBehaviour
             var curScale = timer / totalTime;
             var toSpin = Quaternion.Slerp(spin, Quaternion.identity, curScale);
             // dont look at all these magic numbers
-            if(curScale < 0.8f) toSpin =  Quaternion.Slerp(toSpin, Quaternion.Slerp(Random.rotation, Quaternion.identity, 0.9f), 0.2f);
+            if(curScale < 0.5f) toSpin =  Quaternion.Slerp(toSpin, Quaternion.Slerp(Random.rotation, Quaternion.identity, 0.9f), 0.2f);
             this.transform.rotation = toSpin * this.transform.rotation;
             yield return new WaitForEndOfFrame();
             timer += Time.deltaTime;

@@ -13,13 +13,17 @@ public class EyeballMoveV2 : MonoBehaviour
 
     float SensitivityX = 60f;
     float SensitivityY = 60f;
+    float SensitivityZ = 60f;
 
     float _rotationX = 0F;
     float _rotationY = 0F;
+    float _rotationZ = 0F;
 
     private static int fidelity = 11;
     float[] _rotXArray = new float[fidelity];
     float[] _rotYArray = new float[fidelity];
+    float[] _rotZArray = new float[fidelity];
+
     int counter = 0;
 
     // Goal AutoAim Vars
@@ -53,21 +57,32 @@ public class EyeballMoveV2 : MonoBehaviour
         if (_lockEye) return;
 
         // Gets rotational input from the mouse
-        _rotationX = Input.GetAxis(_inputMethodX) * SensitivityX;
-        _rotationY = Input.GetAxis(_inputMethodY) * SensitivityY;
+        //_rotationX = Input.GetAxis(_inputMethodX) * SensitivityX;
+        //_rotationY = Input.GetAxis(_inputMethodY) * SensitivityY;
+        _rotationX = udinoListener.instance.leftAxes.x;
+        _rotationY = udinoListener.instance.leftAxes.y;
+        _rotationZ = udinoListener.instance.leftAxes.z;
+
+
         // Put into array
         _rotXArray[counter] = _rotationX;
         _rotYArray[counter] = _rotationY;
+        _rotZArray[counter] = _rotationZ;
+        // Check if wrapping around
         if (++counter > _rotXArray.Length - 1) counter = 0;
+
         // Get average for smoothness
         _rotationX = AverageArray(_rotXArray);
         _rotationY = AverageArray(_rotYArray);
+        _rotationZ = AverageArray(_rotZArray);
 
         // Get the rotation you will be at next as a Quaternion
         Quaternion yQuaternion = Quaternion.AngleAxis(_rotationY, -transform.right);
         Quaternion xQuaternion = Quaternion.AngleAxis(_rotationX, Vector3.up);
+        Quaternion zQuaternion = Quaternion.AngleAxis(_rotationZ, -transform.forward);
 
-        Quaternion rotToApply = yQuaternion * xQuaternion;
+
+        Quaternion rotToApply = yQuaternion * xQuaternion * zQuaternion;
 
         //Debug.Log("Rotation to apply " + rotToApply.eulerAngles);
 

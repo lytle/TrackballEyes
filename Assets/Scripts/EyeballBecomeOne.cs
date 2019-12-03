@@ -20,7 +20,7 @@ public class EyeballBecomeOne : MonoBehaviour
         RightEyeMove = RightEye.GetComponent<EyeballMoveV2>();
 
         // Apply inputs // To-Do: move to scriptable object
-        LeftEyeMove.SetInputs("Left Analog X", "Left Analog Y");
+        LeftEyeMove.SetInputs("Mouse X", "Mouse Y"); //"Left Analog X", "Left Analog Y");
         RightEyeMove.SetInputs("Right Analog X", "Right Analog Y");
 
         // Set current goals
